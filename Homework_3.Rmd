@@ -1,0 +1,87 @@
+---
+title: "Homework_3"
+author: "Rutwik Guntoorkar - rutwik.guntoorkar@rutgers.edu"
+date: "9/22/2022"
+output: html_document
+---
+
+```{r}
+library(fpp)
+library(fpp2)
+data()
+table(debitcards)
+
+
+
+```
+```{r}
+head(debitcards)
+```
+```{r}
+plot(debitcards,main = "Retail debit card usage in Iceland", xlab = "Years", ylab="Monthly retail debit card usage in Iceland (In Millions")
+```
+
+#Conclusion : 
+•Plot shows upper trend pattern in usage data.
+•We can see a small seasonality going up every year.
+•After studying this plot we can infer that:
+∙Acf plot should have significant values.
+∙There might be a wave visual of the correlation depicting the seasonal change in the data.
+
+
+```{r}
+Acf(debitcards, main = "ACF plot - Debit cards Usage in Iceland")
+```
+#Conclusion : 
+•This shows that the historic data has significant impact on the preceding data.
+•Predicted small seasonality can be seen in ACF plot
+
+
+```{r}
+practice <- HoltWinters(debitcards)
+attributes(practice)
+```
+
+
+
+```{r}
+plot(practice)
+```
+#Conclusion : 
+•As seen above Holt winters algorithm is deviating at multiple points.
+•Which indicates tuning must be done for alpha, beta, gamma values.
+
+```{r}
+practice_f <- forecast(practice)
+attributes(practice_f)
+```
+
+
+```{r}
+plot(practice_f$residuals, main = "Residuals")
+```
+
+
+
+
+```{r}
+hist(practice_f$residuals, main = "Residuals - Histogram")
+```
+
+#Conclusion : 
+The histogrm plot shows normal distribution for residual
+
+```{r}
+Acf(practice_f$residuals, main = "Residuals - Acf Plot")
+```
+#Conclusion : 
+As there are four lines crossing confidence internal line, there is significant difference and the residuals can be predictable.
+
+
+```{r}
+accuracy(practice_f)
+```
+#Conclusion : 
+As per ARIMA model:
+As MPE value is close to 0, The forecast is unbiased.
+As RMSE as well is close to 0, the forecast predicted is good.

@@ -1,0 +1,125 @@
+---
+title: "Homework_4"
+author: "Rutwik Guntoorkar"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+library(fpp)
+library(fpp2)
+library(TTR)
+table(debitcards)
+
+```
+```{r}
+attributes(debitcards)
+```
+##Start is 2000 upto 2013
+##12 indicates monthly data
+```{r}
+
+plot(debitcards)
+
+```
+
+
+```{r}
+Acf(debitcards)
+
+```
+#Shows there is slow decline.
+
+```{r}
+##Mean Forecast
+mean_forecast <- meanf(debitcards,10)
+plot(mean_forecast)
+```
+##Forecast is in line with mean of the data available.
+
+
+```{r}
+##Naive Forecast
+naive_forecast <- naive(debitcards,10)
+plot(naive_forecast)
+```
+##Forecast is in line with previous data available.
+
+
+```{r}
+##Random Walk Forecast
+rwf_forecast <- rwf(debitcards,10)
+rwf_forecast <- rwf(debitcards,10, drift=TRUE)
+plot(rwf_forecast)
+```
+
+
+```{r}
+##Seasonal Naive Forecast
+snaive_forecast <- snaive(debitcards,10)
+plot(snaive_forecast)
+```
+
+
+```{r}
+##Moving Averages Forecast
+MA5_forecast <- ma(debitcards,order=10)
+plot(MA5_forecast)
+```
+
+```{r}
+##Moving Averages Forecast
+MA9_forecast <- ma(debitcards,order=15)
+plot(MA9_forecast)
+```
+```{r}
+## Plotting all of the forcasts in a single chart
+plot(mean_forecast)
+lines(naive_forecast$mean,col="red")
+lines(rwf_forecast$mean,col="green")
+lines(snaive_forecast$mean,col="black")
+lines(MA5_forecast,col="Pink")
+lines(MA9_forecast,col="Blue")
+```
+
+
+```{r}
+# what other attributes are there?
+attributes(naive_forecast)
+```
+
+
+```{r}
+# Decomposition
+ets_forecast <- ets(elecequip)
+plot(ets_forecast)
+attributes(ets_forecast)
+ets_forecast$mse
+```
+
+
+
+```{r}
+# HoltWinters
+HW_forecast <- HoltWinters(elecequip)
+plot(HW_forecast)
+```
+
+
+```{r}
+SSE_Simple <- HoltWinters(elecequip,beta=FALSE,gamma=FALSE)
+attributes(SSE_Simple)
+plot(SSE_Simple)
+SSE_Simple$SSE
+head(SSE_Simple$fitted)
+```
+
+
+
+```{r}
+#Forecast
+forecast_ets_1 <- forecast.ets(ets_forecast, h=5)
+plot(forecast_ets_1)
+forecast_ets_2 <- forecast(ets_forecast, h=5)
+plot(forecast_ets_2)
+```

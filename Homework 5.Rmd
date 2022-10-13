@@ -1,0 +1,42 @@
+---
+title: "Homework 5"
+author: "Rutwik Guntoorkar"
+date: "`10/11/2022`"
+output: html_document
+---
+
+```{r}
+
+library(fpp)
+library(fpp2)
+table(debitcards)
+data("debitcards")
+plot(debitcards)
+stl_decomp <- stl(debitcards,s.window ="periodic")
+plot(stl_decomp)
+#We can see in the above graph that the data has upward trend. 
+
+attributes(stl_decomp)
+
+#Seasonal Adjustments for given data
+seasadj(stl_decomp)
+
+#Plotting seasonal adjustment line on the grapgh
+plot(debitcards)
+lines(seasadj(stl_decomp), col="Red")
+
+
+f_stl <- forecast(stl_decomp)
+f_stl <- forecast(stl_decomp,h=20)
+f_stl
+plot(f_stl)
+
+#Other way to decompose
+decomp_1 <- decompose(debitcards)
+attributes(decomp_1)
+
+seasadj(decomp_1)
+
+
+
+```

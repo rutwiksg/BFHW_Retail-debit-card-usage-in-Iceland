@@ -1,0 +1,43 @@
+---
+title: "BF_HW_ARIMA"
+author: "Rutwik Guntoorkar"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r}
+library(fpp)
+library(fpp2)
+library(forecast)
+
+library(TTR)
+table(debitcards)
+dc <- ts(debitcards)
+plot(dc)
+
+ndiffs(dc)
+tsdisplay(dc)
+dc1 <- diff(dc, differences=1)
+plot(dc1)
+tsdisplay(dc1)
+
+#ARIMA
+auto_fit <- auto.arima(dc, trace=TRUE, stepwise = FALSE)
+auto_fit
+attributes(auto_fit)
+plot(forecast(auto_fit,h=5,level=c(99.5)))
+
+
+#Residual Analysis
+Acf(auto_fit$residuals)
+Box.test(residuals(auto_fit), lag=20, type="Ljung")
+plot.ts(residuals(auto_fit))
+hist(auto_fit$residuals)
+tsdiag(auto_fit)
+?tsdiag
+
+
+
+
+
+```
